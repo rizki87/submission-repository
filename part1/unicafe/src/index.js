@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
 const Statistic = (props) => {
-  return (<div><p>{props.text} {props.value}</p></div>)
+  return (
+    <tr>  
+      <td>{props.text}</td>
+      <td>{props.value}</td>
+    </tr>
+  )
 }
 
 const Statistics = (props) => {
@@ -16,12 +21,16 @@ const Statistics = (props) => {
 
   return (
     <div>
-      <Statistic text="good" value ={props.good} />
-      <Statistic text="neutral" value ={props.neutral} />
-      <Statistic text="bad" value ={props.bad} />
-      <Statistic text="all" value ={props.all} />
-      <Statistic text="average" value ={props.average} />
-      <Statistic text="positive" value ={props.positive} />
+      <table>
+        <tbody>        
+          <Statistic text="good" value ={props.good} />
+          <Statistic text="neutral" value ={props.neutral} />
+          <Statistic text="bad" value ={props.bad} />
+          <Statistic text="all" value ={props.all} />
+          <Statistic text="average" value ={props.average} />
+          <Statistic text="positive" value ={props.positive} />
+        </tbody>
+      </table>
     </div>
   );
 };
@@ -49,7 +58,9 @@ const App = () => {
 
   const all = good + neutral + bad;
   const average = (good - bad) / all || 0;
-  const positive = (good / all) * 100 || 0;
+  const precentage = (good / all) * 100 || 0;
+  const positive = precentage + " %"
+
 
   return (
     <div>
