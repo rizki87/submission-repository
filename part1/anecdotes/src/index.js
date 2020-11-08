@@ -1,13 +1,54 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const AnecdoteOfTheDay = (props) => {
+  return (
+    <div>
+      <h1>Anecdote of the day</h1>
+      <p>{props.anecdote}</p>
+      <p>has {props.point} votes</p> 
+      <ButtonVote vote={props.vote} text="vote" />
+      <ButtonNext next={props.next} text="next anecdote" />
+    </div>
+  )
+}
+
+const AnecdoteWithMostVotes = (props) => {
+  if(props.mostVoted !== -1){ 
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>{props.IndexMostVoted}</p>      
+    </div>
+  )
+  }
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      <p>~</p>      
+    </div>
+  )
+}
+
+const ButtonNext = (props) => {
+  return (
+    <button onClick={props.next}>{props.text}</button>
+  )
+}
+const ButtonVote = (props) => {
+  return (
+    <button onClick={props.vote}>{props.text}</button>
+  )
+}
+
 const App = (props) => {
   const [selected, setSelected] = useState(0)
 
   const anecdotesLength = props.anecdotes.length;
   const emptyArray = Array.apply(null, new Array(anecdotesLength)).map(Number.prototype.valueOf, 0)
-  
+
   const [points, setPoints] = useState(emptyArray)  
+  const [mostVoted, setMostVoted] = useState(-1)    
 
   const next = () => {
     const random = Math.floor(Math.random() * anecdotesLength);
@@ -19,14 +60,15 @@ const App = (props) => {
     // increment the property 2 value by one
     copy[selected] += 1
     setPoints(copy)
+
+    const maxIndex = copy.indexOf(Math.max(...copy))
+    setMostVoted(maxIndex) 
   }; 
 
   return (
-    <div>
-      <p>{props.anecdotes[selected]}</p>
-      <p>has {points[selected]} votes</p>
-      <button onClick={vote}>vote</button>
-      <button onClick={next}>next anecdote</button>
+    <div>      
+      <AnecdoteOfTheDay anecdote={props.anecdotes[selected]} point={points[selected]} vote={vote} next={next} />    
+      <AnecdoteWithMostVotes mostVoted={mostVoted} IndexMostVoted={props.anecdotes[mostVoted]}  />      
     </div>
   )
 }
