@@ -10,6 +10,12 @@ function App() {
   const handleCountriesChange = (event) => {
     setSearchTerm(event.target.value)
   }
+  
+  const buttonClick = (event) => {
+    const filteredArray = searchResults.filter(res => res.name === event.target.value);
+    // console.log("filteredArray ", filteredArray);
+    setSearchResults(filteredArray)
+  }
 
   useEffect(() => {
     console.log('effect')
@@ -42,9 +48,9 @@ function App() {
       <Detail key={i} name={item.name} capital={item.capital} population={item.population} languages={item.languages} flag={item.flag} />
     )
   } else {
-    content = <Lists searchResults={searchResults}/>
+    content = <Lists searchResults={searchResults} buttonClick={buttonClick} />
   }
-
+ 
   // console.log("length ", searchResults);
   
   return (
