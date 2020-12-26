@@ -26,10 +26,22 @@ const App = () => {
       number: newNumber
     }
 
-    const findPerson = persons.findIndex(person => person.name === newName);
+    const findPerson = persons.findIndex(person => person.name === newName);    
+    const p = persons.find(person => person.name === newName);   
 
     if(findPerson !== -1){
-        alert(`${newName} is already added to phonebook`)
+        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
+          personService
+            .replace(p.id, nameObject)
+            .then(response => {
+              persons[findPerson] = response;
+              const editedList = persons.map(person => person);
+              setPersons(editedList)
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
     } else {
         personService
           .create(nameObject)
