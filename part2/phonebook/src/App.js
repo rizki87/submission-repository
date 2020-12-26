@@ -56,7 +56,20 @@ const App = () => {
   const filteredList = !filteredPerson ? persons : persons.filter(person => 
     person.name.includes(filteredPerson) 
   );
-  // console.log("filteredList ", filteredList)
+  
+  const handleDelete = (p) => {
+    if (window.confirm(`Delete ${p.name}`)) {
+      personService
+          .deletePerson(p.id)
+          .then(response => {
+            const newList = persons.filter(person => person.id !== p.id);
+            setPersons(newList)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    }
+  }
 
   return (
     <div>
@@ -65,7 +78,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm onSubmitForm={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons filteredList={filteredList}/>
+      <Persons filteredList={filteredList} handleDelete={handleDelete}/>
     </div>
   )
 }
