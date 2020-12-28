@@ -10,7 +10,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ filteredPerson, setFilteredPerson ] = useState('')
-  const [ successMessage, setSuccessMessage] = useState(null)
+  const [ message, setMessage] = useState(null)
+  const [ messageType, setMessageType] = useState('')
 
   useEffect(() => {
     console.log("effect");
@@ -40,15 +41,16 @@ const App = () => {
               const editedList = persons.map(person => person);
               setPersons(editedList)
 
-              setSuccessMessage(
+              setMessage(
                 `Added ${response.name}`
               )
+              setMessageType('success')
               setTimeout(() => {
-                setSuccessMessage(null)
+                setMessage(null)
               }, 5000)
             })
             .catch(err => {
-              console.log(err);
+              console.log(err);              
             });
         }
     } else {
@@ -59,11 +61,12 @@ const App = () => {
             setNewName('')
             setNewNumber('')
 
-            setSuccessMessage(
+            setMessage(
               `Added ${returnedPerson.name}`
             )
+            setMessageType('success')
             setTimeout(() => {
-              setSuccessMessage(null)
+              setMessage(null)
             }, 5000)
           })
     }   
@@ -86,15 +89,24 @@ const App = () => {
   );
   
   const handleDelete = (p) => {
+    const newList = persons.filter(person => person.id !== p.id);
+    
     if (window.confirm(`Delete ${p.name}`)) {
       personService
           .deletePerson(p.id)
           .then(response => {
-            const newList = persons.filter(person => person.id !== p.id);
             setPersons(newList)
           })
           .catch(err => {
             console.log(err);
+            setMessage(
+              `Information of ${p.name} has already been removed from server`
+            )
+            setMessageType('error')
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+            setPersons(newList)
           });
     }
   }
@@ -102,7 +114,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={message} type={messageType} />
       <Filter value={filteredPerson} onChange={handleSearchChange} />
       <h2>add a new</h2>
       <PersonForm onSubmitForm={addName} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange} />
