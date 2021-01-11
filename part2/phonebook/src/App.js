@@ -29,32 +29,8 @@ const App = () => {
       number: newNumber
     }
 
-    const findPerson = persons.findIndex(person => person.name === newName);    
-    const p = persons.find(person => person.name === newName);   
-
-    if(findPerson !== -1){
-        if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
-          personService
-            .replace(p.id, nameObject)
-            .then(response => {
-              persons[findPerson] = response;
-              const editedList = persons.map(person => person);
-              setPersons(editedList)
-
-              setMessage(
-                `Added ${response.name}`
-              )
-              setMessageType('success')
-              setTimeout(() => {
-                setMessage(null)
-              }, 5000)
-            })
-            .catch(err => {
-              console.log(err);              
-            });
-        }
-    } else {
-        personService
+    // temporary - no condition.  [3.14: Phonebook database, step2]
+    personService
           .create(nameObject)
           .then(returnedPerson => {
             setPersons(persons.concat(returnedPerson))
@@ -69,7 +45,48 @@ const App = () => {
               setMessage(null)
             }, 5000)
           })
-    }   
+
+    // const findPerson = persons.findIndex(person => person.name === newName);    
+    // const p = persons.find(person => person.name === newName);   
+
+    // if(findPerson !== -1){
+    //     if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one`)) {
+    //       personService
+    //         .replace(p.id, nameObject)
+    //         .then(response => {
+    //           persons[findPerson] = response;
+    //           const editedList = persons.map(person => person);
+    //           setPersons(editedList)
+
+    //           setMessage(
+    //             `Added ${response.name}`
+    //           )
+    //           setMessageType('success')
+    //           setTimeout(() => {
+    //             setMessage(null)
+    //           }, 5000)
+    //         })
+    //         .catch(err => {
+    //           console.log(err);              
+    //         });
+    //     }
+    // } else {
+    //     personService
+    //       .create(nameObject)
+    //       .then(returnedPerson => {
+    //         setPersons(persons.concat(returnedPerson))
+    //         setNewName('')
+    //         setNewNumber('')
+
+    //         setMessage(
+    //           `Added ${returnedPerson.name}`
+    //         )
+    //         setMessageType('success')
+    //         setTimeout(() => {
+    //           setMessage(null)
+    //         }, 5000)
+    //       })
+    // }   
   }
 
   const handleNameChange = (event) => {
