@@ -51,8 +51,10 @@ const App = () => {
                 setMessage(null)
               }, 5000)
             })
-            .catch(err => {
-              console.log(err);              
+            .catch(error => {
+              console.log(error.response.data) 
+              setMessage(error.response.data.error)
+              setMessageType('error')  
             });
         }
     } else {
@@ -71,6 +73,11 @@ const App = () => {
               setMessage(null)
             }, 5000)
           })
+          .catch(error => {
+            console.log(error.response.data) 
+            setMessage(error.response.data.error)
+            setMessageType('error')   
+          });
     }   
   }
 
